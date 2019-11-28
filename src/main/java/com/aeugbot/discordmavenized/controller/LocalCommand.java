@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-
-
 import com.aeugbot.discordmavenized.model.Message;
 import com.aeugbot.discordmavenized.view.UI;
 import com.aeugbot.discordmavenized.model.BotModel;
@@ -32,6 +30,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.time.Instant;
+import music.PlayerManager;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 /**
  *
@@ -72,7 +77,7 @@ public class LocalCommand {
             @Override
             public void keyPressed(KeyEvent e) {
 
-                JTextArea UIPanel = UI.getUIText();
+                JTextArea outputField = UI.getUIText();
 
                 String textFromMiddle = middleField.getText();
 
@@ -81,22 +86,48 @@ public class LocalCommand {
                     the enter key is pressed and something is there*/
 
                     if (textFromMiddle.contains("!")) {
-                        Message message = new Message("Local", "Local", textFromMiddle);
+                        Message currentMessage = new Message("Local", "Local", textFromMiddle);
 
                         try {
-                            fileWriting(message);
+                            fileWriting(currentMessage);
 
                         } catch (IOException ex) {
                             Logger.getLogger(LocalCommand.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
-                        if (textFromMiddle.contains("!ping")) {
-                            UIPanel.append("\n" + message.toString() + "(responded with pong)");
-                        } else if (textFromMiddle.contains("!snail")) {
-                            UIPanel.append("\n" + message.toString() + "(responded with mail)");
-                        } else {
-                            UIPanel.append("\n" + message.toString());
+                        if (currentMessage.toString().contains("meowzers")) {
+                            //who the fuck is going to request meowzers
+                            //placeholder so that commands can execute 
+                            /*
+                    the logic that handles the bot's response; eventually, once 
+                    the functionality for playing music is implented (on my own)
+                    this will print out to the jtexfield in amore robust manner. 
+                             */
                         }
+                        if (currentMessage.toString().contains("!snail")) {
+                            outputField.append("\n" + currentMessage + "(responded with mail)");
+
+                        }
+                        if (currentMessage.toString().contains("!admin")) {
+                            outputField.append("\n" + currentMessage + "(responded with !admin)");
+
+                        }
+                        if (currentMessage.toString().contains("!ping")) {
+                            outputField.append("\n" + currentMessage + "(responded with a pong)");
+
+                        }
+                        /*if (currentMessage.toString().contains("help")) {
+                outputField.append("\n" + currentMessage + "(responded with !help)");
+                MessageChannel channel = event.getChannel();
+                String help = "current commands: ! ping, ! snail, ! admin, ! help, ! play";
+                channel.sendMessage(help).queue();
+                
+            } */
+
+                        if (currentMessage.toString().contains("!play")) {
+
+                        }
+                        /*
 
                         /*
                             I think I'm going to have to access messages with the json name like I do 
@@ -172,6 +203,7 @@ public class LocalCommand {
                 messages.add(newMessage);
 
                 logToJsonReader.endObject();
+                logToJsonReader.close();
                 //closes the reader object to prevent memory issues.
 
                 mapping(messages); //adds the local commands to localMap

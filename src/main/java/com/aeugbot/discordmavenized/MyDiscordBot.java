@@ -6,13 +6,14 @@
 package com.aeugbot.discordmavenized;
 
 import com.aeugbot.discordmavenized.controller.*;
+import java.io.FileNotFoundException;
 /**
  *
  * @author eugene
  */
 public class MyDiscordBot {
   
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         // TODO code application logic here
 
         BotController myController = new BotController();

@@ -6,6 +6,9 @@ import javax.security.auth.login.LoginException;
 import com.aeugbot.discordmavenized.model.Message;
 import com.aeugbot.discordmavenized.view.UI;
 import com.aeugbot.discordmavenized.model.BotModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 
 public class BotController {
@@ -26,6 +29,17 @@ public class BotController {
             System.out.println(le.getMessage());
         }
         UI = new UI();
+        UI.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                File daJson = new File(ml.getFileName());
+                daJson.delete();
+                e.getWindow().dispose();
+            }
+        });
+
 
         ProgramListener();
         ViewChanger();
@@ -46,9 +60,7 @@ public class BotController {
 
     }
     
-    private void LocalCommand(BotModel bm, UI UI, ViewChanger vc){
-        System.out.println("local commands ready!");
-        
+    private void LocalCommand(BotModel bm, UI UI, ViewChanger vc){        
         LocalCommand lc = new LocalCommand(bm,UI,vc);
         
     }

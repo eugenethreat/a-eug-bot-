@@ -12,6 +12,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import java.util.HashMap;
 import java.util.Map;
 import net.dv8tion.jda.api.entities.Guild;
@@ -55,7 +56,8 @@ public class PlayerManager {
         apm.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack at) {
-                channel.sendMessage("adding to queue: " + (at.getInfo().title)).queue();
+                
+                channel.sendMessage("now playing!: " + (at.getInfo().title) + " - " + at.getInfo().author).queue();
                 play(musicManager, at); //ez clap 
                 /*
                 so this the class that takes care of actually PLAYING the audio.

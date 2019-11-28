@@ -10,12 +10,9 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -72,7 +69,8 @@ public final class UI extends JFrame {
         panelBackgrounds();
 
         setVisible(true);
-
+        
+        
     }
 
     private void UIPanelConstraints(GridBagConstraints gbc) {

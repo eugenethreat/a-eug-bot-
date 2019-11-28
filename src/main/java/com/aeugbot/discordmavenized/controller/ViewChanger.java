@@ -17,13 +17,7 @@ import javax.swing.JTextField;
 
 import com.aeugbot.discordmavenized.model.Message;
 import com.aeugbot.discordmavenized.view.UI;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import music.AudioPlayerSendHandler;
+
 import music.PlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -93,8 +87,11 @@ public class ViewChanger extends ListenerAdapter {
 
                 messages.add(newMessage);
                 logToJsonReader.endObject();
+
                 //closes the reader object to prevent memory issues.
             }
+
+            logToJsonReader.close();
 
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -116,55 +113,69 @@ public class ViewChanger extends ListenerAdapter {
             Message currentMessage = messages.get((messages.size() - 1));
             String currentUser = currentMessage.getUser();
 
-            if (currentMessage.toString().contains("!ping")) {
-
-                outputField.append("\n" + currentMessage + "(responded with a pong)");
-                MessageChannel channel = event.getChannel();
-                channel.sendMessage("pong!").queue();
+            if (currentMessage.toString().contains("meowzers")) {
+                //who the fuck is going to request meowzers
+                //placeholder so that commands can execute 
                 /*
                     the logic that handles the bot's response; eventually, once 
                     the functionality for playing music is implented (on my own)
                     this will print out to the jtexfield in amore robust manner. 
                  */
-
-            } else if (currentMessage.toString().contains("!snail")) {
-                outputField.append("\n" + currentMessage + "(responded with mail)");
+            }
+            if (currentMessage.toString().contains("!snail")) {
+                outputField.append("\n" + currentMessage + "(responded with lindsey jordan is my queen)");
                 MessageChannel channel = event.getChannel();
                 channel.sendMessage("lindsey jordan is my queen!").queue();
 
-            } else if (currentMessage.toString().contains("!play")) {
+            }
+            if (currentMessage.toString().contains("!admin")) {
+                outputField.append("\n" + currentMessage + "(responded with admin abuse never felt so good)");
+                MessageChannel channel = event.getChannel();
+                channel.sendMessage("admin abuse never felt so good!").queue();
+
+            }
+            if (currentMessage.toString().contains("!ping")) {
+                outputField.append("\n" + currentMessage + "(responded with a pong)");
+                MessageChannel channel = event.getChannel();
+                channel.sendMessage("pong!").queue();
+
+            }
+            /*if (currentMessage.toString().contains("help")) {
+                outputField.append("\n" + currentMessage + "(responded with !help)");
+                MessageChannel channel = event.getChannel();
+                String help = "current commands: ! ping, ! snail, ! admin, ! help, ! play";
+                channel.sendMessage(help).queue();
+                
+            } */
+
+            if (currentMessage.toString().contains("!play")) {
 
                 String[] query = currentMessage.getMessage().split(" ", 2);
 
                 PlayerManager manager = PlayerManager.getInstance();
 
                 //connecting to voice channel
-                    GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
+                GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
 
-                    VoiceChannel voice = memberVoiceState.getChannel();
-                    Member selfMemeber = event.getGuild().getSelfMember();
+                VoiceChannel voiceChannel = memberVoiceState.getChannel();
+                Guild guild = event.getGuild();
 
-                    Guild guild = event.getGuild();
+                AudioManager adm = guild.getAudioManager();
 
-                    AudioManager adm = guild.getAudioManager();
+                adm.setSendingHandler(manager.getGuildMusicManager(guild).getSendHandler());
+                adm.openAudioConnection(voiceChannel);
+                //opens the connection to the current voice channel 
 
-                    adm.setSendingHandler(manager.getGuildMusicManager(guild).getSendHandler());
+                outputField.append("\n" + currentMessage + "responded with (!now playing: " + currentMessage.getMessage() + ")");
+                /*
+                the message is taken care of in the loadAndPlay method
+                 */
 
-                    adm.openAudioConnection(voice);
-                    
-                outputField.append("\n" + currentMessage + "responded with (!now playing: " + currentMessage.getMessage());
-                MessageChannel channel = event.getChannel();
-                channel.sendMessage("now playing! ").queue();
-
-                System.out.println("q2" + query[1]);
-                
-                String mbv = "https://www.youtube.com/watch?v=t0dJqlvOSq4";
-                //manager.loadAndPlay((TextChannel) event.getChannel(), mbv);
-                
                 manager.loadAndPlay((TextChannel) event.getChannel(), query[1]);
-                
                 manager.getGuildMusicManager(event.getGuild()).player.setVolume(100);
 
+                //
+                //https://www.youtube.com/watch?v=fH0NQzXlzyQ -- sometimes 
             } /*
             leaving room for more possible commands 
              */ else {
@@ -208,7 +219,13 @@ public class ViewChanger extends ListenerAdapter {
 
         for (Message currentMessage : messages) {
             String text = currentMessage.getMessage();
-            iteratedFrequency.add(text);
+            if (text.contains("!play")) {
+                text = "!play";
+                iteratedFrequency.add(text);
+            } else {
+                iteratedFrequency.add(text);
+
+            }
 
             int occurances = Collections.frequency(iteratedFrequency, text);
             //I'm kinda insane 
