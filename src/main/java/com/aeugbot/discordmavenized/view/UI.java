@@ -64,13 +64,10 @@ public final class UI extends JFrame {
         middlePanelConstraints(gbc);
         settingsPanelConstraints(gbc);
 
-        arbitraryOutputForJim();
-
         panelBackgrounds();
 
         setVisible(true);
-        
-        
+
     }
 
     private void UIPanelConstraints(GridBagConstraints gbc) {
@@ -84,7 +81,7 @@ public final class UI extends JFrame {
         JLabel outputLabel = new JLabel("Recent requests");
         outputLabel.setForeground(Color.white);
 
-        outputTextField = new JTextArea("filler text for output");
+        outputTextField = new JTextArea();
 
         Dimension outputDimension = new Dimension(450, 350); //hardcoded since Dimensions are doo-doo ca-ca 
         outputTextField.setPreferredSize(outputDimension);
@@ -156,8 +153,8 @@ public final class UI extends JFrame {
         } catch (IOException | URISyntaxException e) {
             System.out.println(e.toString());
         } 
-        */
-        this.add(settingsPanel, gbc);
+         */
+        //this.add(settingsPanel, gbc);
 
     }
 
@@ -190,18 +187,6 @@ public final class UI extends JFrame {
 
     public JTextField getMiddleText() {
         return middleTextField;
-    }
-
-    private void arbitraryOutputForJim() {
-
-        JButton jimButton = new JButton("go!");
-        UIPanel.add(jimButton);
-        repaint();
-
-        jimButton.addActionListener((ActionEvent evt) -> {
-            outputTextField.setText("!pong");
-        });
-
     }
 
 }

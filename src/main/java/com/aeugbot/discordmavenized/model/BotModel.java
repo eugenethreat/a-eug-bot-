@@ -5,10 +5,6 @@
  */
 package com.aeugbot.discordmavenized.model;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;

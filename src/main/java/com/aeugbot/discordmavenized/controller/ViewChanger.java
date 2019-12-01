@@ -113,81 +113,82 @@ public class ViewChanger extends ListenerAdapter {
             Message currentMessage = messages.get((messages.size() - 1));
             String currentUser = currentMessage.getUser();
 
-            if (currentMessage.toString().contains("meowzers")) {
-                //who the fuck is going to request meowzers
-                //placeholder so that commands can execute 
-                /*
-                    the logic that handles the bot's response; eventually, once 
-                    the functionality for playing music is implented (on my own)
-                    this will print out to the jtexfield in amore robust manner. 
-                 */
-            }
-            if (currentMessage.toString().contains("!snail")) {
-                outputField.append("\n" + currentMessage + "(responded with lindsey jordan is my queen)");
-                MessageChannel channel = event.getChannel();
-                channel.sendMessage("lindsey jordan is my queen!").queue();
-
-            }
-            if (currentMessage.toString().contains("!admin")) {
-                outputField.append("\n" + currentMessage + "(responded with admin abuse never felt so good)");
-                MessageChannel channel = event.getChannel();
-                channel.sendMessage("admin abuse never felt so good!").queue();
-
-            }
-            if (currentMessage.toString().contains("!ping")) {
-                outputField.append("\n" + currentMessage + "(responded with a pong)");
-                MessageChannel channel = event.getChannel();
-                channel.sendMessage("pong!").queue();
-
-            }
-            /*if (currentMessage.toString().contains("help")) {
+            if (currentMessage.toString().contains("help")) {
                 outputField.append("\n" + currentMessage + "(responded with !help)");
                 MessageChannel channel = event.getChannel();
-                String help = "current commands: ! ping, ! snail, ! admin, ! help, ! play";
+                //String help = "current commands: !ping, !snail, !admin, !help, !play";
+                /*
+                bug -- this message repeats 5 infinitely? 
+                 */
+
+                String help = "some arbitrary output";
                 channel.sendMessage(help).queue();
-                
-            } */
 
-            if (currentMessage.toString().contains("!play")) {
-
-                String[] query = currentMessage.getMessage().split(" ", 2);
-
-                PlayerManager manager = PlayerManager.getInstance();
-
-                //connecting to voice channel
+            } else {
                 GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
 
                 VoiceChannel voiceChannel = memberVoiceState.getChannel();
                 Guild guild = event.getGuild();
-
                 AudioManager adm = guild.getAudioManager();
 
-                adm.setSendingHandler(manager.getGuildMusicManager(guild).getSendHandler());
-                adm.openAudioConnection(voiceChannel);
-                //opens the connection to the current voice channel 
+                PlayerManager manager = PlayerManager.getInstance();
 
-                outputField.append("\n" + currentMessage + "responded with (!now playing: " + currentMessage.getMessage() + ")");
-                /*
-                the message is taken care of in the loadAndPlay method
-                 */
+                if (currentMessage.toString().contains("!snail")) {
+                    outputField.append("\n" + currentMessage + "(responded with lindsey jordan is my queen)");
+                    MessageChannel channel = event.getChannel();
+                    channel.sendMessage("lindsey jordan is my queen!").queue();
 
-                manager.loadAndPlay((TextChannel) event.getChannel(), query[1]);
-                manager.getGuildMusicManager(event.getGuild()).player.setVolume(100);
+                } else if (currentMessage.toString().contains("!abuse")) {
+                    outputField.append("\n" + currentMessage + "(responded with admin abuse never felt so g ood)");
+                    MessageChannel channel = event.getChannel();
+                    channel.sendMessage("admin abuse never felt so good!").queue();
 
-                //
-                //https://www.youtube.com/watch?v=fH0NQzXlzyQ -- sometimes 
-            } /*
-            leaving room for more possible commands 
-             */ else {
-                //outputField.append("\n" + currentMessage.toString());
-                //makes sure bot-output isn't output to the jtextarea.
+                } else if (currentMessage.toString().contains("!ping")) {
+                    outputField.append("\n" + currentMessage + "(responded with a pong)");
+                    MessageChannel channel = event.getChannel();
+                    channel.sendMessage("pong!").queue();
 
-                /*
-                need to figure out what is causing the messages to repeat 
-                
-                all mesaages that dont contain an exclamation point repeat 
-                5 times.
-                 */
+                } else if (currentMessage.toString().contains("!play") && voiceChannel != null) {
+                    
+                    String[] query = currentMessage.getMessage().split(" ", 2);
+
+                    //connecting to voice channel
+                    adm.setSendingHandler(manager.getGuildMusicManager(guild).getSendHandler());
+                    adm.openAudioConnection(voiceChannel);
+                    //opens the connection to the current voice channel 
+
+                    outputField.append("\n" + currentMessage + "responded with (!now playing: " + currentMessage.getMessage() + ")");
+                    /*
+                     the message is taken care of in the loadAndPlay method
+                    */
+
+                    manager.loadAndPlay((TextChannel) event.getChannel(), query[1]);
+                    manager.getGuildMusicManager(event.getGuild()).player.setVolume(100);
+
+                    //https://www.youtube.com/watch?v=fH0NQzXlzyQ -- sometimes 
+                } else if (currentMessage.toString().contains("!stop")) {
+
+                    guild = event.getGuild();
+                    adm = guild.getAudioManager();
+
+                    adm.closeAudioConnection();
+                    //closes the connection to the current voice channel 
+
+                    outputField.append("\n" + currentMessage + "responded with (!now playing: " + currentMessage.getMessage() + ")");
+                    MessageChannel channel = event.getChannel();
+                    channel.sendMessage("playback stopped!").queue();
+
+                } else {
+                    //outputField.append("\n" + currentMessage.toString());
+                    //makes sure bot-output isn't output to the jtextarea.
+
+                    /*
+                    need to figure out what is causing the messages to repeat 
+
+                    all mesaages that dont contain an exclamation point repeat 
+                    5 times.
+                     */
+                }
             }
 
             String mostUsedCommand = mostUsedCommand(messages);
